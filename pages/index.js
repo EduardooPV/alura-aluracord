@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import { Box, Button, Text, TextField, Image } from "@skynexui/components";
 import appConfig from "../config.json";
 
+import bg from '../public/bg.svg'
+
 function Titulo(props) {
   const Tag = props.tag || "h1";
   return (
@@ -19,24 +21,9 @@ function Titulo(props) {
   );
 }
 
-// Componente React
-// function HomePage() {
-//     // JSX
-//     return (
-//         <div>
-//             <GlobalStyle />
-//             <Titulo tag="h2">Boas vindas de volta!</Titulo>
-//             <h2>Discord - Alura Matrix</h2>
-//         </div>
-//     )
-// }
-// export default HomePage
-
 export default function PaginaInicial() {
-  // const username = "EduardooPV";
   const [username, setUsername] = React.useState('')
   const roteamento = useRouter()
-  {/* Só mostra o campo se tiver mais de dois caracteres e desabilita o input */}
 
   return (
     <>
@@ -45,12 +32,8 @@ export default function PaginaInicial() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: appConfig.theme.colors.primary[500],
-          backgroundImage:
-            "url(https://images5.alphacoders.com/680/thumb-1920-680381.png)",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
+          backgroundColor: appConfig.theme.colors.neutrals[999],
+          backgroundImage: `url(${bg.src})`,
         }}
       >
         <Box
@@ -68,6 +51,7 @@ export default function PaginaInicial() {
             padding: "32px",
             margin: "16px",
             boxShadow: "0 2px 10px 0 rgb(0 0 0 / 20%)",
+            border: `1px solid ${appConfig.theme.colors.primary[600]}`,
             backgroundColor: appConfig.theme.colors.neutrals[700],
           }}
         >
@@ -78,7 +62,6 @@ export default function PaginaInicial() {
               event.preventDefault()
               console.log('Mudou')
               roteamento.push('/chat')
-              // window.location.href = "/chat"
             }}
             styleSheet={{
               display: "flex",
@@ -101,22 +84,10 @@ export default function PaginaInicial() {
               {appConfig.name}
             </Text>
 
-            {/* <input
-              type="text"
-              value={username}
-              onChange={function handler(event) {
-                const valor = event.target.value
-                console.log("usuario dig", event.target.value)
-                setUsername(valor)
-              }}
-            /> */}
-
             <TextField
               value={username}
               onChange={function handler(event) {
-                const valor = event.target.value
-                console.log("usuario dig", event.target.value)
-                setUsername(valor)
+                setUsername(event.target.value)
               }}
               fullWidth
               textFieldColors={{
@@ -154,7 +125,7 @@ export default function PaginaInicial() {
               padding: "16px",
               backgroundColor: appConfig.theme.colors.neutrals[800],
               border: "1px solid",
-              borderColor: appConfig.theme.colors.neutrals[999],
+              borderColor: appConfig.theme.colors.primary[600],
               borderRadius: "10px",
               flex: 1,
               minHeight: "240px",
@@ -165,18 +136,18 @@ export default function PaginaInicial() {
                 borderRadius: "50%",
                 marginBottom: "16px",
               }}
-              src={`https://github.com/${username}.png`}
+              src={username.length > 3 ? `https://github.com/${username}.png` : null}
             />
             <Text
               variant="body4"
               styleSheet={{
                 color: appConfig.theme.colors.neutrals[200],
-                backgroundColor: appConfig.theme.colors.neutrals[900],
-                padding: "3px 10px",
-                borderRadius: "1000px",
+                backgroundColor: appConfig.theme.colors.primary[600],
+                padding: "5px 15px",
+                borderRadius: "5px",
               }}
             >
-              {username}
+              {username.length > 3 ? `${username}` : 'Não encontrado'}
             </Text>
           </Box>
           {/* Photo Area */}
