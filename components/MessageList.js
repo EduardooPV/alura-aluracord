@@ -39,10 +39,10 @@ export function MessageList({ mensagens, setMensagens, loading }) {
   };
 
   useEffect(() => {
-    fetch('https://api.github.com/users/EduardooPV')
+    fetch("https://api.github.com/users/EduardooPV")
       .then((response) => response.json())
       .then((result) => {
-        setDadosGithub(result)
+        setDadosGithub(result);
       })
       .catch((err) => {
         // trata se alguma das promises falhar
@@ -149,21 +149,34 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                   vertical: "bottom",
                   horizontal: "left",
                 }}
-                sx={{
-                  "& .css-3bmhjh-MuiPaper-root-MuiPopover-paper": {
-                    padding: "20px",
-                    background: "rgba(20,20,20,1)",
-                    boxShadow: "none",
-                    border: `1px solid ${appConfig.theme.colors.primary[500]}`,
-                  },
-                }}
               >
                 <Box
                   styleSheet={{
                     display: "flex",
                     flexDirection: "column",
+                    background: "rgba(20,20,20,1)",
+                    border: `1px solid ${appConfig.theme.colors.primary[500]}`,
+                    padding: "1rem",
+                    position: "relative",
                   }}
                 >
+                  <a href={dadosGithub.html_url}>
+                    <GitHubIcon
+                      sx={{
+                        position: "absolute",
+                        top: "0.5rem",
+                        right: "0.5rem",
+                        color: "#c3c3c3",
+                        fontSize: "1.8rem",
+                        cursor: "pointer",
+
+                        "&:hover": {
+                          color: "white",
+                        },
+                      }}
+                    />
+                  </a>
+                  
                   <Image
                     styleSheet={{
                       width: "120px",
@@ -316,23 +329,6 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                     </Box>
                   </Box>
                 </Box>
-
-                <a href={dadosGithub.html_url}>
-                  <GitHubIcon
-                    sx={{
-                      position: "absolute",
-                      top: "0.5rem",
-                      right: "0.5rem",
-                      color: "#c3c3c3",
-                      fontSize: "1.8rem",
-                      cursor: "pointer",
-
-                      "&:hover": {
-                        color: "white",
-                      },
-                    }}
-                  />
-                </a>
               </Popover>
 
               <Text
