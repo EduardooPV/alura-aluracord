@@ -48,6 +48,15 @@ export function Chat() {
     setLoading(false);
 
     const subscription = escutaMensagensEmTempoReal((novaMensagem) => {
+      console.log("Nova mensagem:", novaMensagem);
+      console.log("listaDeMensagens:", listaDeMensagens);
+      // Quero reusar um valor de referencia (objeto/array)
+      // Passar uma função pro setState
+
+      // setListaDeMensagens([
+      //     novaMensagem,
+      //     ...listaDeMensagens
+      // ])
       setListaDeMensagens((valorAtualDaLista) => {
         console.log("valorAtualDaLista:", valorAtualDaLista);
         return [novaMensagem, ...valorAtualDaLista];
@@ -65,7 +74,14 @@ export function Chat() {
       texto: novaMensagem,
     };
 
-    supabaseClient.from("mensagens").insert([mensagem]);
+    supabaseClient
+      .from("mensagens")
+      .insert([
+        mensagem,
+      ])
+      .then(({ data }) => {
+        console.log(`Mensagem criada: ${data}`)
+      });
 
     setMensagem("");
   }
