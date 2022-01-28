@@ -45,7 +45,6 @@ export function MessageList({ mensagens, setMensagens, loading }) {
         setDadosGithub(result);
       })
       .catch((err) => {
-        // trata se alguma das promises falhar
         console.error("Failed retrieving information", err);
       });
   }, []);
@@ -53,6 +52,7 @@ export function MessageList({ mensagens, setMensagens, loading }) {
   return (
     <Box
       tag="ul"
+      className="scroll"
       styleSheet={{
         overflowY: "scroll",
         display: "flex",
@@ -135,7 +135,7 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                 variant="contained"
                 onClick={handleClick}
               />
-
+{/* 
               <Popover
                 id={id}
                 open={open}
@@ -176,7 +176,7 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                       }}
                     />
                   </a>
-                  
+
                   <Image
                     styleSheet={{
                       width: "120px",
@@ -330,7 +330,7 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                   </Box>
                 </Box>
               </Popover>
-
+                           */}
               <Text
                 styleSheet={{
                   lineHeight: "0",
@@ -359,7 +359,10 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                 {new Date().toLocaleDateString()}
               </Text>
             </Box>
-            {mensagem.texto}
+            {mensagem.texto.startsWith(":sticker:")
+              ? <Image styleSheet={{maxWidth: "300px"}} src={mensagem.texto.replace(':sticker:', '')} />
+              : mensagem.texto}
+
             <style>{`
               .message:hover > .delete-button {
                 display: block;

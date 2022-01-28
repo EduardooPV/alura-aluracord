@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import appConfig from "../config.json";
+import { useRouter } from "next/router";
 
 // Skynex UI
 import { Box, TextField, Button } from "@skynexui/components";
+import SendIcon from "@mui/icons-material/Send";
 
 import { createClient } from "@supabase/supabase-js";
 
 // Components
 import { Header } from "./Header";
 import { MessageList } from "./MessageList";
+import { ButtonSendSticker } from "./ButtonSendSticker";
 
 import bg from "../public/bg.svg";
 
@@ -17,7 +20,18 @@ const SUPABASE_ANON_KEY =
 const SUPABASE__URL = "https://riigmytluvnruzrqhqir.supabase.co";
 const supabaseClient = createClient(SUPABASE__URL, SUPABASE_ANON_KEY);
 
+function escutaMensagensEmTempoReal(adicionaMensagem) {
+  return supabaseClient
+    .from("mensagens")
+    .on("INSERT", (respostaLive) => {
+      adicionaMensagem(respostaLive.new);
+    })
+    .subscribe();
+}
+
 export function Chat() {
+  const roteamento = useRouter();
+  const usuarioLogado = roteamento.query.username;
   const [mensagem, setMensagem] = useState("");
   const [listaDeMensagens, setListaDeMensagens] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,20 +46,26 @@ export function Chat() {
       });
 
     setLoading(false);
+
+    const subscription = escutaMensagensEmTempoReal((novaMensagem) => {
+      setListaDeMensagens((valorAtualDaLista) => {
+        console.log("valorAtualDaLista:", valorAtualDaLista);
+        return [novaMensagem, ...valorAtualDaLista];
+      });
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   function handleNovaMensagem(novaMensagem) {
     const mensagem = {
-      de: "EduardooPV",
+      de: usuarioLogado,
       texto: novaMensagem,
     };
 
-    supabaseClient
-      .from("mensagens")
-      .insert([mensagem])
-      .then(({ data }) => {
-        setListaDeMensagens([data[0], ...listaDeMensagens]);
-      });
+    supabaseClient.from("mensagens").insert([mensagem]);
 
     setMensagem("");
   }
@@ -127,20 +147,59 @@ export function Chat() {
                 color: appConfig.theme.colors.neutrals[200],
               }}
             />
-            <Button
-              onClick={() => handleNovaMensagem(mensagem)}
-              variant="secondary"
-              colorVariant="warning"
-              label="ENVIAR"
+
+            <Box
               styleSheet={{
-                position: "absolute",
-                right: "2rem",
-                marginBottom: "8px;",
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "10px",
+                gap: "0.5rem",
               }}
-            />
+            >
+              <Button
+                onClick={() => handleNovaMensagem(mensagem)}
+                variant="secondary"
+                colorVariant="warning"
+                label={
+                  <SendIcon
+                    sx={{
+                      fontSize: "1.2rem",
+                      color: `${appConfig.theme.colors.neutrals[200]}`,
+                      padding: "0",
+                      marginTop: "0.2rem",
+                    }}
+                  />
+                }
+                styleSheet={{
+                  borderRadius: "50%",
+                  padding: "0",
+                  minWidth: "38px",
+                  minHeight: "38px",
+                  hover: {
+                    backgroundColor: appConfig.theme.colors.neutrals[500],
+                  },
+                }}
+              />
+              <ButtonSendSticker
+                onStickerClick={(sticker) => {
+                  handleNovaMensagem(`:sticker:${sticker}`);
+                }}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>
+      <style>{`
+      .scroll::-webkit-scrollbar {
+          width: 8px;
+          background: ${appConfig.theme.colors.neutrals[500]}
+      }
+      
+      .scroll::-webkit-scrollbar-thumb {
+        background-color: ${appConfig.theme.colors.primary[500]};    
+        border-radius: 10px;     
+      }
+    `}</style>
     </Box>
   );
 }
