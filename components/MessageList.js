@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import appConfig from "../config.json";
+import moment from "moment";
 
 // Skynex UI
 import { Box, Text, Image } from "@skynexui/components";
@@ -9,6 +10,7 @@ import Popover from "@mui/material/Popover";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { createTheme } from "@mui/material/styles";
+import { Password } from "@mui/icons-material";
 
 // MATERIAL UI
 const theme = createTheme({
@@ -135,7 +137,7 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                 variant="contained"
                 onClick={handleClick}
               />
-{/* 
+              {/* 
               <Popover
                 id={id}
                 open={open}
@@ -356,12 +358,18 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                 }}
                 tag="span"
               >
-                {new Date().toLocaleDateString()}
+                {moment(mensagem.created_at).format("HH:mm:ss")},{" "}
+                {moment(mensagem.created_at).format("DD/MM")}
               </Text>
             </Box>
-            {mensagem.texto.startsWith(":sticker:")
-              ? <Image styleSheet={{maxWidth: "300px"}} src={mensagem.texto.replace(':sticker:', '')} />
-              : mensagem.texto}
+            {mensagem.texto.startsWith(":sticker:") ? (
+              <Image
+                styleSheet={{ maxWidth: "300px" }}
+                src={mensagem.texto.replace(":sticker:", "")}
+              />
+            ) : (
+              mensagem.texto
+            )}
 
             <style>{`
               .message:hover > .delete-button {
