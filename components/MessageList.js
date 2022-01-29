@@ -137,7 +137,7 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                 variant="contained"
                 onClick={handleClick}
               />
-              {/* 
+              
               <Popover
                 id={id}
                 open={open}
@@ -332,7 +332,7 @@ export function MessageList({ mensagens, setMensagens, loading }) {
                   </Box>
                 </Box>
               </Popover>
-                           */}
+                          
               <Text
                 styleSheet={{
                   lineHeight: "0",
