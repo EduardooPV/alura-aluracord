@@ -4,7 +4,7 @@ Aplicação desenvolvida durante a **ImersãoReact** da **Alura**.
 
 ---
 
-#### Visite o site: [CLICANDO AQUI!](http://localhost:3000/)
+#### Visite o site: [CLICANDO AQUI!](https://aluracord-five-pink.vercel.app/)
 
 <h2 align='center'>📌 PREVIEW -WEB- 📌</h2> </br>
 
